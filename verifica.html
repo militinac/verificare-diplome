@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Verificare diplomă</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; background: #f9f9f9; }
+    #result { margin-top: 2rem; font-size: 18px; }
+    .valid { color: green; }
+    .invalid { color: red; }
+  </style>
+</head>
+<body>
+  <h2>Verificare diplomă</h2>
+  <div id="result">Se verifică...</div>
+
+  <script>
+    const id = new URLSearchParams(window.location.search).get("id");
+    const apiURL = "https://script.google.com/macros/s/PASTE_AICI_ID_SCRIPT/exec?id=" + id;
+
+    fetch(apiURL)
+      .then(response => response.json())
+      .then(data => {
+        const r = document.getElementById("result");
+        if (data.valid) {
+          r.innerHTML = `
+            <p><strong>Nume:</strong> ${data.nume}</p>
+            <p><strong>Curs:</strong> ${data.curs}</p>
+            <p><strong>Data:</strong> ${data.data}</p>
+            <p class="valid">✅ Diplomă validă</p>`;
+        } else {
+          r.innerHTML = `<p class="invalid">❌ Diplomă inexistentă sau invalidă</p>`;
+        }
+      })
+      .catch(() => {
+        document.getElementById("result").innerHTML = "<p class='invalid'>Eroare la conectarea la server.</p>";
+      });
+  </script>
+</body>
+</html>
